@@ -7,6 +7,16 @@ env:
     CLUSTER_NAME: "brain-tasks-cluster"
 
 phases:
+  install:
+    commands:
+      - curl -LO "https://dl.k8s.io/release/v1.34.0/bin/linux/amd64/kubectl"
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - kubectl version --client
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip -q -o awscliv2.zip
+      - ./aws/install --update
+      - aws --version
   pre_build:
     commands:
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
